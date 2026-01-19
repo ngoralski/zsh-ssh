@@ -22,7 +22,7 @@ _parse_config_file() {
   # Read the file line by line
   while IFS= read -r line || [[ -n "$line" ]]; do
     # Match lines starting with 'Include'
-    if [[ $line =~ ^[Ii]nclude[[:space:]]+(.*) ]] && (( $#match > 0 )); then
+    if [[ $line =~ "^[Ii]nclude[[:space:]]+(.*)" ]] && (( $#match > 0 )); then
       # Split the rest of the line into individual paths
       local include_paths=(${(z)match[1]})
 
@@ -31,7 +31,7 @@ _parse_config_file() {
         eval "local expanded=\${(e)raw_path}"
 
         # If path is relative, resolve it relative to the current config file
-        if [[ "$expanded" != /* ]]; then
+        if [[ "$expanded" != /* && "$expanded" != ~* ]]; then
           expanded="$(dirname "$config_file_path")/$expanded"
         fi
 
